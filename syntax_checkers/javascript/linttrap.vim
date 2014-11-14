@@ -29,15 +29,13 @@ function! SyntaxCheckers_javascript_linttrap_IsAvailable() dict
     let ver = syntastic#util#getVersion(self.getExecEscaped() . ' --version')
     call self.log(self.getExec() . ' version =', ver)
 
-    return syntastic#util#versionIsAtLeast(ver, [0, 4])
+    return syntastic#util#versionIsAtLeast(ver, [0, 4, 0])
 endfunction
 
 function! SyntaxCheckers_javascript_linttrap_GetLocList() dict
-    call syntastic#log#deprecationWarn('javascript_linttrap_conf', 'javascript_linttrap_args',
-        \ "'--config ' . syntastic#util#shexpand(OLD_VAR)")
 
     let makeprg = self.makeprgBuild({ 'args_before': '--reporter=compact' })
-
+    
     let errorformat =
         \ '%E%f: line %l\, col %c\, Error - %m,' .
         \ '%W%f: line %l\, col %c\, Warning - %m'
@@ -56,7 +54,8 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'javascript',
-    \ 'name': 'linttrap'})
+    \ 'name': 'linttrap',
+    \ 'exec': 'lint-trap' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
